@@ -1,6 +1,7 @@
 ﻿using exceptions_yee.Entities;
 using exceptions_yee.Entities.Exceptions;
 using System;
+using System.Globalization;
 
 namespace exceptions_yee
 {
@@ -10,27 +11,25 @@ namespace exceptions_yee
         {
             try
             {
-                Console.Write("Room number: ");
-                int numeroQuarto = int.Parse(Console.ReadLine());
-                Console.Write("Check-in date (dd/MM/yyyy): ");
-                DateTime checkin = DateTime.Parse(Console.ReadLine());
-                Console.Write("Check-out date (dd/MM/yyyy): ");
-                DateTime checkout = DateTime.Parse(Console.ReadLine());
-                Reservation reservation = new Reservation(numeroQuarto, checkin, checkout);
-                Console.WriteLine(reservation.ToString());
+                Console.WriteLine("Enter account data");
+                Console.Write("Number: ");
+                int accountNumber = int.Parse(Console.ReadLine());
+                Console.Write("Holder: ");
+                string holder = Console.ReadLine();
+                Console.Write("Initial balance: ");
+                double balance = double.Parse(Console.ReadLine(), CultureInfo.InvariantCulture);
+                Console.Write("Withdraw limit: ");
+                double withdrawLimit = double.Parse(Console.ReadLine(), CultureInfo.InvariantCulture);
+                Account account = new Account(accountNumber, holder, balance, withdrawLimit);
                 Console.WriteLine();
-                Console.WriteLine("Enter data to update the reservation: ");
-                Console.Write("Check-in date (dd/MM/yyyy): ");
-                checkin = DateTime.Parse(Console.ReadLine());
-                Console.Write("Check-out date (dd/MM/yyyy): ");
-                checkout = DateTime.Parse(Console.ReadLine());
-
-                reservation.updateData(checkin, checkout);
-                Console.WriteLine("Reservation: " + reservation);
+                Console.Write("Enter amount for withdraw: ");
+                double amount = double.Parse(Console.ReadLine(), CultureInfo.InvariantCulture);
+                account.Withdraw(amount);
+                Console.Write("New balance: " + account.Balance.ToString("F2", CultureInfo.InvariantCulture));
             }
-            catch (DomainException ex)
+            catch(DomainException ex)
             {
-                Console.WriteLine("Error in reservation: " + ex.Message);
+                Console.WriteLine("Withdraw error: " + ex.Message);
             }
             catch(FormatException ex)
             {
